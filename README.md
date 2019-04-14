@@ -2,7 +2,7 @@
 Aprendiendo Python
 
 
-´´´python
+```python
 
 import sys
 
@@ -137,5 +137,5 @@ if __name__ == '__main__':
     else:
         print('Invalid command')
 
-´´´
+```
 
