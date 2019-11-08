@@ -139,3 +139,79 @@ if __name__ == '__main__':
 
 ```
 
+
+#### Importando CSV
+```python
+db1 = pd.read_csv('LEC_VENDOR_CONDICIONES_DE_PAGO-15810031.csv', sep=',',parse_dates=['Fecha Última Modificación','Fecha/Hora Creación','Fecha Última Actividad'],encoding = "ISO-8859-1", engine='python')
+db1.fillna("0")
+```
+#### Limpiando CSV
+```python
+db2=db1.drop(['Nombre 2', 'Fecha Efectiva', 'Estado a Fecha Efectiva'],axis=1)
+```
+#### Formato de fecha
+```python
+db2['Fecha Última Modificación'] = db2['Fecha Última Modificación'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
+db2['Fecha/Hora Creación'] = db2['Fecha/Hora Creación'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
+db2['Fecha Última Actividad'] = db2['Fecha Última Actividad'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
+```
+
+#### Dictionary, para el conteo de lineas
+```python
+Cantidad_de_Lineas = []
+dictionary = {}
+count=1
+
+for i in range(len(db2['ID Proveedor'])):
+    if db2['ID Proveedor'][i] in dictionary:
+        count=dictionary.get(db2['ID Proveedor'][i])+1
+        #Change Values dictionary
+        dictionary[db2['ID Proveedor'][i]]=count
+        #Accessing Items dictionary
+        x = dictionary.get(db2['ID Proveedor'][i])
+        Cantidad_de_Lineas.append(x)
+    else:
+        count=1
+        #Change Values dictionary
+        dictionary[db2['ID Proveedor'][i]]=count
+        #Accessing Items dictionary
+        x = dictionary.get(db2['ID Proveedor'][i])
+        #db2['Cantidad_de_Lineas'].append(x)
+        Cantidad_de_Lineas.append(x)
+```
+#### Para generar Key
+```python
+db2['concatenate'] = (db2['ID Set'] + db2['ID Proveedor'])
+```
+
+#### Convertir una palabra en numero, metodo I
+```python
+db2['Status'] = ['1' if x == 'PER00' else '2' for x in db2['ID Set']]
+db2['Status']
+```
+
+#### Convertir una palabra en numero, metodo II
+```python
+def map_values(row, values_dict):
+    return values_dict[row]
+
+values_dict = {'PER00': 1, 'CHL00': 2}
+db2['Status2'] = db2['ID Set'].apply(map_values, args = (values_dict,))
+db2['Status2']
+```
+
+#### Convertir una palabra en numero, metodo III
+
+```python
+#http://jonathansoma.com/lede/foundations/classes/pandas%20columns%20and%20functions/apply-a-function-to-every-row-in-a-pandas-dataframe/
+
+def pais(row):
+    if row["ID Set"] == "PER00":
+        return "Peru"
+    if row["ID Set"] == "CHL00":
+        return "Chile"
+    else:
+        return "-"
+db2 = db2.assign(Status3=db2.apply(pais, axis=1))
+db2.columns
+```
