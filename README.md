@@ -142,18 +142,28 @@ if __name__ == '__main__':
 
 #### Importando CSV
 ```python
+db1 = pd.read_csv('Status_data(2).csv', sep=',',parse_dates=['Fecha Contable'],low_memory=False)
+
 db1 = pd.read_csv('LEC_VENDOR_CONDICIONES_DE_PAGO-15810031.csv', sep=',',parse_dates=['Fecha Última Modificación','Fecha/Hora Creación','Fecha Última Actividad'],encoding = "ISO-8859-1", engine='python')
+
 db1.fillna("0")
 ```
 #### Limpiando CSV
 ```python
 db2=db1.drop(['Nombre 2', 'Fecha Efectiva', 'Estado a Fecha Efectiva'],axis=1)
 ```
-#### Formato de fecha
+## Formato de fecha
+
+#### Homogenizando fecha
 ```python
 db2['Fecha Última Modificación'] = db2['Fecha Última Modificación'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
 db2['Fecha/Hora Creación'] = db2['Fecha/Hora Creación'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
 db2['Fecha Última Actividad'] = db2['Fecha Última Actividad'].astype('datetime64[ns]', dayfirst=True, format='%d-%m-%Y')
+```
+#### Dejando solo el mes o año
+```python
+db2['month'] = db2['Fecha Contable'].dt.month
+db2['year'] = db2['Fecha Contable'].dt.year
 ```
 
 #### Dictionary, para el conteo de lineas
