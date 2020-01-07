@@ -215,3 +215,98 @@ def pais(row):
 db2 = db2.assign(Status3=db2.apply(pais, axis=1))
 db2.columns
 ```
+
+## Dictionary en Python
+
+### Conteo de lineas
+
+#### creando la lista de conteo
+```python
+for i in range(len(db2['Key_Comprobante_Proveedor'])):
+    if db2['Key_Comprobante_Proveedor'][i] in dictionary:
+        count=dictionary.get(db2['Key_Comprobante_Proveedor'][i])+1
+        #Change Values dictionary
+        dictionary[db2['Key_Comprobante_Proveedor'][i]]=count
+        #Accessing Items dictionary
+        x = dictionary.get(db2['Key_Comprobante_Proveedor'][i])
+        Cantidad_de_Lineas.append(x)
+    else:
+        count=1
+        #Change Values dictionary
+        dictionary[db2['Key_Comprobante_Proveedor'][i]]=count
+        #Accessing Items dictionary
+        x = dictionary.get(db2['Key_Comprobante_Proveedor'][i])
+        #db2['Cantidad_de_Lineas'].append(x)
+        Cantidad_de_Lineas.append(x)
+```
+#### transformando la lista en dataframe
+```python
+db2['Cantidad_de_Lineas']=Cantidad_de_Lineas
+```
+
+### Creacion de dictionary desde excel
+
+#### Leyendo el excel
+```python
+dicti=pd.read_excel('Dictionary.xlsx')
+```
+#### Transformando en listas las columnas del excel
+
+![Dictionary excel](https://user-images.githubusercontent.com/17385297/71935127-d1970180-3184-11ea-88b4-5e82bb0c9df4.JPG)
+
+```python
+list1=dicti['Key'].tolist()
+list2=dicti['Estado'].tolist()
+```
+#### Creando el dictionary desde 2 list
+```python
+#https://stackoverflow.com/questions/209840/convert-two-lists-into-a-dictionary
+mapped=dict(zip(list1, list2))
+type(mapped)
+```
+
+###  Primer tipo de dictionary
+#### creando la lista
+```python
+Key_Excepcion = []
+```
+#### creando el ciclo
+```python
+for row in db4['Key_BU_Proveedor']:
+    try:
+        x = mapped.get(row)
+        Key_Excepcion.append(x)
+    except KeyError:
+        x = '1'
+        Key_Excepcion.append(x)
+```
+#### confirmando el largo
+```python
+len(Key_Excepcion)
+```
+####  transformando la lista en dataframe
+```python
+db4['Key_Excepcion']=Key_Excepcion
+```
+
+###  Segundo tipo de dictionary
+#### creando la lista
+```python
+Key_Excepcion = []
+```
+#### creando el ciclo
+```python
+for row in db4['Key_BU_Proveedor']:
+    #x = mapped.get(row,'never') esta opcion es en caso de no encontrar el Key, coloca 'never'
+    x = mapped.get(row) #esta opcion es en caso de no encontrar el Key, coloca 'None'
+    Key_Excepcion.append(x)
+```
+#### confirmando el largo
+```python
+len(Key_Excepcion)
+```
+####  transformando la lista en dataframe
+```python
+db4['Key_Excepcion']=Key_Excepcion
+```
+
