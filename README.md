@@ -218,9 +218,25 @@ db2.columns
 
 ## Dictionary en Python
 
-### Conteo de lineas
+### Creando la key
 
-#### creando la lista de conteo
+#### homogenizando los tipos y creando llave con ['UN'] y ['ID Proveedor']
+```python
+db2['Key_BU_Proveedor'] = db2['UN'].str.cat(db2['ID Proveedor'].values.astype(str))
+```
+
+
+### Dictionary Conteo de lineas
+
+#### creando los objetos
+```python
+#https://www.geeksforgeeks.org/python-dictionary/
+Cantidad_de_Lineas = [] #creando la lista
+dictionary = {} #creando el dictionary
+count=1 #conteo inicial
+```
+
+#### creando el ciclo
 ```python
 for i in range(len(db2['Key_Comprobante_Proveedor'])):
     if db2['Key_Comprobante_Proveedor'][i] in dictionary:
