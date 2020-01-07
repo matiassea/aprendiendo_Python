@@ -208,6 +208,12 @@ db2 = db2.assign(Status3=db2.apply(pais, axis=1))
 db2.columns
 ```
 
+## Exportando dataframe a excel
+
+```python
+db2.to_excel("filtrado_por_fecha.xlsx")
+```
+
 ## Dictionary en Python
 
 ### Creando la key
