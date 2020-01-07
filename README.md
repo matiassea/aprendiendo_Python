@@ -139,8 +139,16 @@ if __name__ == '__main__':
 
 ```
 
+### Librerias de siempre
 
-#### Importando CSV
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+### Importando CSV
 ```python
 db1 = pd.read_csv('Status_data(2).csv', sep=',',parse_dates=['Fecha Contable'],low_memory=False)
 
@@ -148,7 +156,7 @@ db1 = pd.read_csv('LEC_VENDOR_CONDICIONES_DE_PAGO-15810031.csv', sep=',',parse_d
 
 db1.fillna("0")
 ```
-#### Limpiando CSV
+### Limpiando CSV
 ```python
 db2=db1.drop(['Nombre 2', 'Fecha Efectiva', 'Estado a Fecha Efectiva'],axis=1)
 ```
@@ -166,33 +174,7 @@ db2['month'] = db2['Fecha Contable'].dt.month
 db2['year'] = db2['Fecha Contable'].dt.year
 ```
 
-#### Dictionary, para el conteo de lineas
-```python
-Cantidad_de_Lineas = []
-dictionary = {}
-count=1
-
-for i in range(len(db2['ID Proveedor'])):
-    if db2['ID Proveedor'][i] in dictionary:
-        count=dictionary.get(db2['ID Proveedor'][i])+1
-        #Change Values dictionary
-        dictionary[db2['ID Proveedor'][i]]=count
-        #Accessing Items dictionary
-        x = dictionary.get(db2['ID Proveedor'][i])
-        Cantidad_de_Lineas.append(x)
-    else:
-        count=1
-        #Change Values dictionary
-        dictionary[db2['ID Proveedor'][i]]=count
-        #Accessing Items dictionary
-        x = dictionary.get(db2['ID Proveedor'][i])
-        #db2['Cantidad_de_Lineas'].append(x)
-        Cantidad_de_Lineas.append(x)
-```
-#### Para generar Key
-```python
-db2['concatenate'] = (db2['ID Set'] + db2['ID Proveedor'])
-```
+## Convertir palabra en numero en un dataframe
 
 #### Convertir una palabra en numero, metodo I
 ```python
@@ -233,8 +215,8 @@ db2.columns
 #### homogenizando los tipos y creando llave con ['UN'] y ['ID Proveedor']
 ```python
 db2['Key_BU_Proveedor'] = db2['UN'].str.cat(db2['ID Proveedor'].values.astype(str))
+db2['concatenate'] = (db2['ID Set'] + db2['ID Proveedor'])
 ```
-
 
 ### Dictionary Conteo de lineas
 
@@ -265,6 +247,7 @@ for i in range(len(db2['Key_Comprobante_Proveedor'])):
         #db2['Cantidad_de_Lineas'].append(x)
         Cantidad_de_Lineas.append(x)
 ```
+
 #### transformando la lista en dataframe
 ```python
 db2['Cantidad_de_Lineas']=Cantidad_de_Lineas
