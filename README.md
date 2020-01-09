@@ -325,3 +325,4 @@ len(Key_Excepcion)
 db4['Key_Excepcion']=Key_Excepcion
 ```
 
+https://towardsdatascience.com/python-dictionary-from-scratch-c41316794bcc
